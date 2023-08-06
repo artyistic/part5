@@ -10,7 +10,6 @@ const getAll = async () => {
 
 
 const createNew = async (newBlog) =>{
-  console.log("creaetNew", token)
   const config = {
     headers: { Authorization: token },
   }
@@ -28,6 +27,13 @@ const deleteBlog = async (deleteId) =>{
   
 }
 
+const updateBlog = async (updatedId, updatedBlog) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  await axios.put(`${baseUrl}/${updatedId}`, updatedBlog, config)  
+}
 
 const setToken = (updateToken) => {
   token = `Bearer ${updateToken}`
@@ -36,4 +42,4 @@ const setToken = (updateToken) => {
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, createNew, deleteBlog, setToken }
+export default { getAll, createNew, deleteBlog, updateBlog, setToken }
