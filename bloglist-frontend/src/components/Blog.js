@@ -16,14 +16,10 @@ const Blog = ({blog, deleteBlog,  updateBlog, currUsername}) => {
 
   const handleLike = async (event) => {
     event.preventDefault()
-    await updateBlog(blog.id, {...blog, likes: blog.likes += 1})
+    await updateBlog(blog)
   }
 
-  const deleteButton = () => {
-    return (
-      <button onClick={(event) => handleDelete(event)}>delete</button>
-    )
-  }
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author} 
@@ -32,7 +28,7 @@ const Blog = ({blog, deleteBlog,  updateBlog, currUsername}) => {
           {blog.url} <br></br>
           {`likes ${blog.likes}`} <button onClick={handleLike}>like</button><br></br>
           {blog.user.username} <br></br>
-          { currUsername === blog.user.username && deleteButton()}
+          { currUsername === blog.user.username && (<button onClick={(event) => handleDelete(event)}>delete</button>)}
         </div>
       </Togglable>
     </div>  

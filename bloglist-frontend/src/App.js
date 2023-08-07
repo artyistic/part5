@@ -1,26 +1,19 @@
 import { useState, useEffect } from "react"
-import Blog from "./components/Blog"
 import blogService from "./services/blogs"
-import loginService from "./services/login"
 import Notification from "./components/Notification"
 import ShowLoggedInUser from "./components/ShowLoggedInUser"
-import CreateBlog from "./components/CreateBlog"
-import Togglable from "./components/Togglable"
+import LoginForm from "./components/LoginForm"
+import ShowBlogs from "./components/ShowBlogs"
 const App = () => {
-
-  
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+
   const [message, setMessage] = useState("")
 
-
-  useEffect(() => {
-    blogService.getAll().then((intialBlogs) => {
-      setBlogs(intialBlogs)
-    })
-  }, [])
+  // useEffect(() => {
+  //   blogService.getAll().then((intialBlogs) => {
+  //     setBlogs(intialBlogs)
+  //   })
+  // }, [])
 
   useEffect(() => {
     //check for cached in user
@@ -32,107 +25,25 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login(username, password)
-      setUser(user)
-      blogService.setToken(user.token)
-      setUsername("")
-      setPassword("")
-
-      // cache in local storage
-      window.localStorage.setItem("loggedInUser", JSON.stringify(user))
-      setMessage("you are logged in")
-      setTimeout(() => setMessage(), 5000)
-    } catch (exception) {
-      setMessage("wrong login credentials")
-      setTimeout(() => setMessage(), 5000)
-    }
-  }
-
   const handleLogout = (event) => {
     event.preventDefault()
     window.localStorage.removeItem("loggedInUser")
     setUser(null)
   }
 
-  
-  // slightly clunky since we are passing the whole blog object now just for the window confirm
-  const createBlog = async (newBlog) => {
-    const addedBlog = await blogService.createNew(newBlog)
-    setBlogs(blogs.concat(addedBlog))
-    setMessage(`new blog ${addedBlog.title} by ${addedBlog.author} is added`)
-    setTimeout(() => setMessage(), 5000)
-  }
-
-  
-
-  
-  const deleteBlog = async (deleteBlog) => {
-    if (window.confirm(`Do you really want to delete ${deleteBlog.title} by ${deleteBlog.author}`)){
-      await blogService.deleteBlog(deleteBlog.id)
-      // update blogs list
-      setBlogs(blogs.filter(blog => blog.id !== deleteBlog.id))
-    }
-  }
-
-  const updateBlog = async (updateId, updatedBlog) => {
-    await blogService.updateBlog(updateId, updatedBlog)
-    setBlogs([...blogs])
-  }
-
-
-  const loginForm = () => {
-    return (
-      <div>
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
-      </div>
-    )
-  }
-
-  const showBlogs = () => {
-    return (
-      <div>
-        <ShowLoggedInUser name={user.name} />
-        <button onClick={handleLogout}>Logout</button>
-        <h2>Create</h2>
-        <Togglable buttonLabel="new Blog">
-          <CreateBlog createBlog={createBlog} />
-        </Togglable>
-        {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} updateBlog={updateBlog} currUsername={user.username}/>
-      )}
-      </div>
-    )
-  }
-
   return (
     <div>
       <Notification message={message} />
       <h2>blogs</h2>
-      {user === null ? loginForm() : showBlogs()}
+      {user === null ? (
+        <LoginForm setUser={setUser} setMessage={setMessage} />
+      ) : (
+        <>
+          <ShowLoggedInUser name={user.name} />
+          <button onClick={handleLogout}>Logout</button>
+          <ShowBlogs setMessage={setMessage} username={user.username} />
+        </>
+      )}
     </div>
   )
 }

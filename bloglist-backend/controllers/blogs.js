@@ -25,6 +25,9 @@ blogsRouter.post("/", async (request, response) => {
     user: user._id
   })
   const addedBlog = await newBlog.save()
+  // very important since the frontend needs to know the details of the user to render the details of the person that created the
+  // blog and whether to add a delete button 
+  await addedBlog.populate("user")
   user.blogs = user.blogs.concat(addedBlog._id)
   await user.save()
   response.status(201).json(addedBlog)

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import blogService from "../services/blogs"
 const CreateBlog = ({ createBlog }) => {
   const [ title, setTitle ] = useState("")
   const [ author, setAuthor ] = useState("")
