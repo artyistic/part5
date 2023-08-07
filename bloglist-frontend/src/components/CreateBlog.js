@@ -16,7 +16,7 @@ const CreateBlog = ({ createBlog }) => {
     setUrl("")
   }
 
-  
+
   return (
     <div>
       <form onSubmit={handleCreate}>

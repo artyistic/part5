@@ -2,9 +2,11 @@ import Togglable from "./Togglable"
 import Blog from "./Blog"
 import CreateBlog from "./CreateBlog"
 import blogService from "../services/blogs"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 const ShowBlogs = ({ setMessage, username }) => {
   const [blogs, setBlogs] = useState([])
+
+  const createBlogRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then((intialBlogs) => {
@@ -14,6 +16,7 @@ const ShowBlogs = ({ setMessage, username }) => {
 
   // slightly clunky since we are passing the whole blog objects now for create delete and update
   const createBlog = async (newBlog) => {
+    createBlogRef.current.toggleVisibility()
     const addedBlog = await blogService.createNew(newBlog)
     setBlogs(blogs.concat(addedBlog))
     setMessage(`new blog ${addedBlog.title} by ${addedBlog.author} is added`)
@@ -29,6 +32,8 @@ const ShowBlogs = ({ setMessage, username }) => {
       await blogService.deleteBlog(deletedBlog.id)
       // update blogs list
       setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
+      setMessage(`new blog ${deletedBlog.title} by ${deletedBlog.author} is deleted`)
+      setTimeout(() => setMessage(), 5000)
     }
   }
 
@@ -38,10 +43,12 @@ const ShowBlogs = ({ setMessage, username }) => {
       likes: (updatedBlog.likes += 1),
     })
     setBlogs([...blogs])
+    setMessage(`${updatedBlog.title} by ${updatedBlog.author} is liked`)
+    setTimeout(() => setMessage(), 5000)
   }
   return (
     <div>
-      <Togglable buttonLabel="new Blog">
+      <Togglable buttonLabel="new Blog" ref={createBlogRef}>
         <CreateBlog createBlog={createBlog} />
       </Togglable>
       {blogs.map((blog) => (

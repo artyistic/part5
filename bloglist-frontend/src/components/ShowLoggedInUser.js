@@ -1,4 +1,4 @@
-const ShowLoggedInUser = ({name}) => {
+const ShowLoggedInUser = ({ name }) => {
   if (!name) return null
   else{
     return (

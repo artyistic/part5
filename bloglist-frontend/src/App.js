@@ -9,12 +9,6 @@ const App = () => {
 
   const [message, setMessage] = useState("")
 
-  // useEffect(() => {
-  //   blogService.getAll().then((intialBlogs) => {
-  //     setBlogs(intialBlogs)
-  //   })
-  // }, [])
-
   useEffect(() => {
     //check for cached in user
     const cachedUser = window.localStorage.getItem("loggedInUser")
@@ -24,6 +18,10 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  useEffect(() => {
+    document.title = "Blogs"
+  })
 
   const handleLogout = (event) => {
     event.preventDefault()
