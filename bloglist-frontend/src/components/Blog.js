@@ -24,7 +24,7 @@ const Blog = ({ blog, deleteBlog,  updateBlog, currUsername }) => {
     <div style={blogStyle}>
       {blog.title} {blog.author}
       <Togglable buttonLabel="view">
-        <div>
+        <div className="hiddenByDefault">
           {blog.url} <br></br>
           {`likes ${blog.likes}`} <button onClick={handleLike}>like</button><br></br>
           {blog.user.username} <br></br>
