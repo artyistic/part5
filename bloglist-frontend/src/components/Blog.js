@@ -22,7 +22,7 @@ const Blog = ({ blog, deleteBlog,  updateBlog, currUsername }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title} {blog.author}
+      {blog.title} by {blog.author}
       <Togglable buttonLabel="view">
         <div className="hiddenByDefault">
           {blog.url} <br></br>
