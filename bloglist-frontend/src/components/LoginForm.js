@@ -28,7 +28,7 @@ const LoginForm = ({ setUser, setMessage }) => {
 
   return (
     <div>
-      <h2>Create</h2>
+      <h2>Log in</h2>
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -36,6 +36,7 @@ const LoginForm = ({ setUser, setMessage }) => {
             type="text"
             value={username}
             name="Username"
+            id="username"
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
@@ -45,10 +46,11 @@ const LoginForm = ({ setUser, setMessage }) => {
             type="password"
             value={password}
             name="Password"
+            id="password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type="submit">login</button>
+        <button type="submit" id="login-button">login</button>
       </form>
     </div>
   )

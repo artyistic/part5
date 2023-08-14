@@ -43,15 +43,14 @@ const ShowBlogs = ({ setMessage, username }) => {
       likes: (updatedBlog.likes += 1),
     })
     setBlogs([...blogs])
-    setMessage(`${updatedBlog.title} by ${updatedBlog.author} is liked`)
-    setTimeout(() => setMessage(), 5000)
   }
   return (
     <div>
       <Togglable buttonLabel="new Blog" ref={createBlogRef}>
         <CreateBlog createBlog={createBlog} />
       </Togglable>
-      {blogs.map((blog) => (
+      {/* blogs are sorted in descending order according to the number of likes, comparator function is reversed bc of that */}
+      {blogs.sort((a, b) => {return b.likes - a.likes}).map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}

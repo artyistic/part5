@@ -32,7 +32,7 @@ const App = () => {
   return (
     <div>
       <Notification message={message} />
-      <h2>blogs</h2>
+      <h1>Blogs</h1>
       {user === null ? (
         <LoginForm setUser={setUser} setMessage={setMessage} />
       ) : (
